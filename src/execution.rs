@@ -26,6 +26,7 @@ pub enum HtnAgentState {
     Failure,
 }
 
+#[allow(clippy::type_complexity)]
 pub fn system_extract_plans_for_unplanned_agents(
     query: Query<
         (
@@ -115,38 +116,36 @@ pub fn system_handle_agent_state_changes(
                         .remove::<(HtnAgentCurrentTask, HtnAgentState, HtnAgentPlan)>();
                 }
             }
+        } else if let Some(next_task) = plan.plan_stack.pop() {
+            push_task_to_agent(next_task, &mut command.entity(entity), &task_registry);
         } else {
-            if let Some(next_task) = plan.plan_stack.pop() {
-                push_task_to_agent(next_task, &mut command.entity(entity), &task_registry);
-            } else {
-                command
-                    .entity(entity)
-                    .remove::<(HtnAgentCurrentTask, HtnAgentState, HtnAgentPlan)>();
-                warn!("Failed to initialize a plan for entity {}", entity);
-            }
+            command
+                .entity(entity)
+                .remove::<(HtnAgentCurrentTask, HtnAgentState, HtnAgentPlan)>();
+            warn!("Failed to initialize a plan for entity {}", entity);
         }
     }
 }
 
 fn push_task_to_agent(
     task: String,
-    mut entity: &mut EntityCommands,
+    entity: &mut EntityCommands,
     task_registry: &Res<TaskRegistry>,
 ) {
     let Some(task_data) = task_registry.get_named(&task) else {
         return;
     };
-    task_data.add(&mut entity);
+    task_data.add(entity);
     entity.insert((HtnAgentCurrentTask(task), HtnAgentState::Running));
 }
 
 fn try_remove_previous_task(
-    mut entity: &mut EntityCommands,
+    entity: &mut EntityCommands,
     task_registry: &Res<TaskRegistry>,
     previous: &HtnAgentCurrentTask,
 ) {
     let Some(task) = task_registry.get_named(&previous.0) else {
         return;
     };
-    task.remove(&mut entity);
+    task.remove(entity);
 }

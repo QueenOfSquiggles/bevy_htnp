@@ -77,9 +77,7 @@ impl TaskRegistry {
                     })
                     .unwrap_or_default()
                 {
-                    let Some(data) = self.get_named(&t) else {
-                        return None;
-                    };
+                    let data = self.get_named(&t)?;
                     req = req.unmet_requirements(data.postconditions());
                     req.append(data.preconditions());
                 }
@@ -109,9 +107,7 @@ impl TaskRegistry {
                     })
                     .unwrap_or_default()
                 {
-                    let Some(data) = self.get_named(&t) else {
-                        return None;
-                    };
+                    let data = self.get_named(&t)?;
                     context = data.preconditions().consume(&context);
                     context.append(data.postconditions());
                 }
@@ -187,7 +183,7 @@ pub enum Task {
 impl Task {
     pub fn decompose_iter(iter: impl Iterator<Item = Task>) -> Vec<String> {
         iter.map(|t| t.decompose())
-            .reduce(|agg, item| agg.into_iter().chain(item.into_iter()).collect())
+            .reduce(|agg, item| agg.into_iter().chain(item).collect())
             .unwrap_or_default()
     }
 

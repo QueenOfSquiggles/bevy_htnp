@@ -31,7 +31,11 @@ pub mod prelude {
             crate::orchestration::orchestrate_systems(app, &self.orchestrate);
         }
     }
-
+    impl Default for HtnPlanningPlugin {
+        fn default() -> Self {
+            Self::new()
+        }
+    }
     impl HtnPlanningPlugin {
         pub fn new() -> Self {
             Self {

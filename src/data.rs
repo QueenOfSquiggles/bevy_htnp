@@ -106,14 +106,12 @@ impl WorldState {
                 return false;
             }
         }
-        return true;
+        true
     }
 
     pub fn get(&self, s: impl Into<UniqueName>) -> Option<Variant> {
-        let Some(value) = self.entries.get(&s.into()) else {
-            return None;
-        };
-        return Some(value.clone());
+        let value = self.entries.get(&s.into())?;
+        Some(value.clone())
     }
 
     pub fn append(&mut self, other: &WorldState) {
@@ -237,7 +235,7 @@ where
 
         for (name, truth) in value {
             let un: UniqueName = name.into();
-            if let Some(_) = map.insert(un.clone(), truth) {
+            if map.insert(un.clone(), truth).is_some() {
                 warn!("Duplicate entries for key: {:?}", un);
             }
         }
@@ -285,6 +283,7 @@ impl From<UniqueName> for Variant {
     }
 }
 
+#[allow(clippy::from_over_into)]
 impl Into<Variant> for &'static str {
     fn into(self) -> Variant {
         Variant::String(self.into())
@@ -297,6 +296,7 @@ impl From<f32> for Variant {
     }
 }
 
+#[allow(clippy::from_over_into)]
 impl Into<Requirements> for WorldState {
     /// Converts the world state to a Requirements struct with all predicates being `Equals`.
     /// Not terribly customizeable, but that's what you get for taking the easy way you rapscallion!
@@ -309,6 +309,7 @@ impl Into<Requirements> for WorldState {
     }
 }
 
+#[allow(clippy::from_over_into)]
 impl Into<UniqueName> for &'static str {
     fn into(self) -> UniqueName {
         UniqueName::new(self)

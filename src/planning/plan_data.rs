@@ -3,7 +3,6 @@ use std::{
     fmt::Debug,
     sync::Arc,
     time::{Duration, Instant},
-    u32,
 };
 
 use bevy::{
@@ -45,7 +44,7 @@ impl Debug for Plan {
     }
 }
 
-#[derive(Component)]
+#[derive(Component, Default)]
 pub struct TimeSlicedTreeGen {
     pub active_nodes: VecDeque<Arc<Node<PlanNode>>>,
     pub valid_nodes: Vec<Arc<Node<PlanNode>>>,
@@ -148,7 +147,7 @@ impl TimeSlicedTreeGen {
                 value: PlanNode {
                     task: Some(s),
                     world: current_world.clone().concat(data.postconditions()),
-                    cost: data.cost(&current_world),
+                    cost: data.cost(current_world),
                     depth: 0,
                 },
                 parent: None,
@@ -232,30 +231,10 @@ impl TimeSlicedTreeGen {
         let Some(ref parent3) = parent2.parent else {
             return false;
         };
-        let t0 = node
-            .value
-            .task
-            .as_ref()
-            .and_then(|task| Some(task.name()))
-            .unwrap_or("0".into());
-        let t1 = parent
-            .value
-            .task
-            .as_ref()
-            .and_then(|task| Some(task.name()))
-            .unwrap_or("0".into());
-        let t2 = parent2
-            .value
-            .task
-            .as_ref()
-            .and_then(|task| Some(task.name()))
-            .unwrap_or("0".into());
-        let t4 = parent3
-            .value
-            .task
-            .as_ref()
-            .and_then(|task| Some(task.name()))
-            .unwrap_or("0".into());
+        let t0 = node.value.task.as_ref().map(|task| task.name());
+        let t1 = parent.value.task.as_ref().map(|task| task.name());
+        let t2 = parent2.value.task.as_ref().map(|task| task.name());
+        let t4 = parent3.value.task.as_ref().map(|task| task.name());
 
         // this only catches A-B-A-B patterns, not A-B-C-A-B-C patterns
         // goddamn I need a better solution
@@ -284,9 +263,8 @@ impl TimeSlicedTreeGen {
         task: &Task,
         registry: &TaskRegistry,
     ) -> Option<Node<PlanNode>> {
-        let Some(data) = registry.get_task(task) else {
-            return None;
-        };
+        let data = registry.get_task(task)?;
+
         let virtual_world = parent.value.world.concat(data.postconditions());
         Some(Node::<PlanNode> {
             value: PlanNode {
