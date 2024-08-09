@@ -1,0 +1,15 @@
+[package]
+name = "bevy_htnp"
+version = "0.1.0"
+edition = "2021"
+
+[dependencies]
+bevy = "0.14.0"
+
+# this is a fork of bevy-trait-query that upgrades to bevy 0.14 that's in development
+bevy-trait-query = { git = "https://github.com/RobWalt/bevy-trait-query.git", branch = "bevy-0.14-partial-update" }
+
+rand = "0.8.5"
+
+[features]
+default = []
