@@ -1,3 +1,5 @@
+[![CI](https://github.com/QueenOfSquiggles/bevy_htnp/actions/workflows/rust.yml/badge.svg)](https://github.com/QueenOfSquiggles/bevy_htnp/actions/workflows/rust.yml)
+
 # Bevy HTNP
 
 > Hierarchical Task Network Planning deeply integrated with bevy
