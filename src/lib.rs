@@ -1,5 +1,3 @@
-#![feature(trivial_bounds)]
-
 pub mod data;
 pub mod events;
 pub mod execution;
