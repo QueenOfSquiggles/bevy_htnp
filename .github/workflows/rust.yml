@@ -12,6 +12,7 @@ jobs:
       matrix:
         os: [windows-latest, ubuntu-latest, macos-latest]
         toolchain: [stable, nightly]
+        op: [build, test, clippy]
     runs-on: ${{ matrix.os }}
     steps:
       - uses: actions/checkout@v2
@@ -45,7 +46,7 @@ jobs:
 
       - uses: actions-rs/cargo@v1
         with:
-          command: build
+          command: ${{ matrix.op }}
         env:
           CARGO_INCREMENTAL: 0
           RUSTFLAGS: "-C debuginfo=0"
