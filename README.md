@@ -1,5 +1,7 @@
 [![CI](https://github.com/QueenOfSquiggles/bevy_htnp/actions/workflows/rust.yml/badge.svg)](https://github.com/QueenOfSquiggles/bevy_htnp/actions/workflows/rust.yml)
 
+> Note that CI currently tests against a matrix of (windows, mac, linux) \* (toolchain stable, nightly) \* (cargo build, test, clippy), which ensures validity on every possible desktop target. If you know of a clever way to add WASM testing as well I would greatly appreciate it!!!!
+
 # Bevy HTNP
 
 > Hierarchical Task Network Planning deeply integrated with bevy
