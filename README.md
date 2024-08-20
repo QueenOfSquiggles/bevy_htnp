@@ -13,3 +13,19 @@ Hierarchical Task Networks are characterized by having a concrete set of specifi
 ## Guaranteed Best Documentation
 
 The best documentation will always be the examples and unit tests. The example `basic_htnp` should be an excellent way to show how to get started.
+
+## Contibuting
+
+(I definitely need better contribution guidlines someday...)
+
+#### What I am doing to make this crate better
+- Integrating into my own game(s)
+- Fixing issues I come across wrt my games
+- Adding features necessary to my games that are general enough to be applicable to other games
+
+#### What you can do to make this crate better
+- Report bugs (see issue templates)
+- Create feature request write-ups (see issue templates)
+- Submit PRs **for existing feature requests**
+
+Overall, your contributions must not affect the licensing of this crate. 99% of the time this shouldn't be a problem. As long as you write your own code, your contributions should be fine.
